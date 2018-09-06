@@ -12,6 +12,11 @@
 ```yaml
 tankerkoenig:
   api_key: YOUR_API_KEY
+  monitored_conditions:
+    - e5
+    - e10
+    - diesel
+    - status
   stations:
     - id: '11571341-3296-4f16-a363-28b8c188872c'
       name: 'Aral - Kölner_Str.'
@@ -21,6 +26,12 @@ tankerkoenig:
 ```
 
 ### Options
+| key                    | default                   | required | description
+|------------------------|---------------------------|----------|---
+| `api_key`              |                           | yes      | The API_KEY from Tankerkönig (descibed below)
+| `monitored_conditions` | [e5, e10, diesel, status] | no       | What should be monitored
+
+#### Stations
 | key      | default           | required | description
 |----------|-------------------|----------|---
 | `id`     |                   | yes      | The ID of the station (descibed below)
@@ -49,7 +60,7 @@ this, to resolve it, restart Home-Assistant.
 
 ***
 
-# Follow me
+# Support me / Follow me
 [![Web](https://img.shields.io/badge/www-panbachi.de-blue.svg?style=flat-square&colorB=3d72a8&colorA=333333)](https://www.panbachi.de)
 [![Facebook](https://img.shields.io/badge/-%40panbachi.de-blue.svg?style=flat-square&logo=facebook&colorB=3B5998&colorA=eee)](https://www.facebook.com/panbachi.de/)
 [![Twitter](https://img.shields.io/badge/-%40panbachi-blue.svg?style=flat-square&logo=twitter&colorB=1DA1F2&colorA=eee)](https://twitter.com/panbachi)

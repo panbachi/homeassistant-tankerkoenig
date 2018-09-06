@@ -8,6 +8,7 @@ import logging
 from datetime import timedelta
 
 from custom_components.tankerkoenig import TankerkoenigDevice, CONF_STATIONS
+from homeassistant.const import CONF_MONITORED_CONDITIONS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,9 +23,14 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     sensors = []
 
     for station in tankerkoenig_config[CONF_STATIONS]:
-        sensors.append(TankerkoenigSensor('E5', station, tankerkoenig_config))
-        sensors.append(TankerkoenigSensor('E10', station, tankerkoenig_config))
-        sensors.append(TankerkoenigSensor('Diesel', station, tankerkoenig_config))
+        if('e5' in tankerkoenig_config[CONF_MONITORED_CONDITIONS]):
+            sensors.append(TankerkoenigSensor('E5', station, tankerkoenig_config))
+
+        if ('e10' in tankerkoenig_config[CONF_MONITORED_CONDITIONS]):
+            sensors.append(TankerkoenigSensor('E10', station, tankerkoenig_config))
+
+        if ('diesel' in tankerkoenig_config[CONF_MONITORED_CONDITIONS]):
+            sensors.append(TankerkoenigSensor('Diesel', station, tankerkoenig_config))
 
     add_entities(sensors)
 

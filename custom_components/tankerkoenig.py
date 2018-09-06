@@ -19,6 +19,7 @@ from homeassistant.const import (
     ATTR_UNIT_OF_MEASUREMENT,
 
     CONF_API_KEY,
+    CONF_MONITORED_CONDITIONS,
     CONF_NAME,
     CONF_SCAN_INTERVAL,
 
@@ -46,6 +47,13 @@ CONF_STATION_STREET = 'street'
 CONF_STATION_BRAND = 'brand'
 CONF_STATION_NAME = 'name'
 
+SENSOR_TYPES = {
+    'e5': ['E5', '°C'],
+    'e10': ['E10', 'lx'],
+    'diesel': ['Diesel', '%'],
+    'status': ['State', None]
+}
+
 STATION_SCHEMA = vol.Schema({
     vol.Required(CONF_STATION_ID): cv.string,
     vol.Optional(CONF_STATION_NAME): cv.string,
@@ -57,7 +65,9 @@ CONFIG_SCHEMA = vol.Schema({
     DOMAIN: vol.Schema({
         vol.Required(CONF_API_KEY): cv.string,
         vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): cv.time_period,
-        vol.Required(CONF_STATIONS): vol.All(cv.ensure_list, [STATION_SCHEMA])
+        vol.Required(CONF_STATIONS): vol.All(cv.ensure_list, [STATION_SCHEMA]),
+        vol.Optional(CONF_MONITORED_CONDITIONS, default=list(SENSOR_TYPES)):
+            vol.All(cv.ensure_list, [vol.In(SENSOR_TYPES)]),
     })
 }, extra=vol.ALLOW_EXTRA)
 
@@ -67,8 +77,11 @@ def setup(hass, config):
 
     config[DOMAIN]['api'] = TankerkoenigAPI(tankerkoenig_config)
 
-    for platform in TANKERKOENIG_PLATFORMS:
-        load_platform(hass, platform, DOMAIN, tankerkoenig_config, config)
+
+    load_platform(hass, 'sensor', DOMAIN, tankerkoenig_config, config)
+
+    if('status' in tankerkoenig_config[CONF_MONITORED_CONDITIONS]):
+        load_platform(hass, 'binary_sensor', DOMAIN, tankerkoenig_config, config)
 
     def update_records_interval(now):
         config[DOMAIN]['api'].update()
