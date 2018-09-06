@@ -51,7 +51,7 @@ SENSOR_TYPES = {
     'e5': ['E5', '°C'],
     'e10': ['E10', 'lx'],
     'diesel': ['Diesel', '%'],
-    'status': ['State', None]
+    'state': ['State', None]
 }
 
 STATION_SCHEMA = vol.Schema({

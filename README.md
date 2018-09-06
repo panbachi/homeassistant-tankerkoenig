@@ -16,7 +16,7 @@ tankerkoenig:
     - e5
     - e10
     - diesel
-    - status
+    - state
   stations:
     - id: '11571341-3296-4f16-a363-28b8c188872c'
       name: 'Aral - Kölner_Str.'
@@ -29,7 +29,7 @@ tankerkoenig:
 | key                    | default                   | required | description
 |------------------------|---------------------------|----------|---
 | `api_key`              |                           | yes      | The API_KEY from Tankerkönig (descibed below)
-| `monitored_conditions` | [e5, e10, diesel, status] | no       | What should be monitored
+| `monitored_conditions` | [e5, e10, diesel, state] | no       | What should be monitored
 
 #### Stations
 | key      | default           | required | description
