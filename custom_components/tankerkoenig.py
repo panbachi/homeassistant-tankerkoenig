@@ -80,7 +80,7 @@ def setup(hass, config):
 
     load_platform(hass, 'sensor', DOMAIN, tankerkoenig_config, config)
 
-    if('status' in tankerkoenig_config[CONF_MONITORED_CONDITIONS]):
+    if('state' in tankerkoenig_config[CONF_MONITORED_CONDITIONS]):
         load_platform(hass, 'binary_sensor', DOMAIN, tankerkoenig_config, config)
 
     def update_records_interval(now):
