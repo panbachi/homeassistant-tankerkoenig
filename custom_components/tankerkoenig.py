@@ -30,7 +30,7 @@ from homeassistant.const import (
 )
 from homeassistant.helpers.event import track_time_interval
 
-__version__ = '0.0.1'
+__version__ = '0.1.0'
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -38,7 +38,7 @@ DOMAIN = 'tankerkoenig'
 
 TANKERKOENIG_PLATFORMS = ['sensor', 'binary_sensor']
 
-DEFAULT_SCAN_INTERVAL = timedelta(minutes=10)
+SCAN_INTERVAL = timedelta(minutes=10)
 
 CONF_ID = 'id'
 CONF_STATIONS = 'stations'
@@ -64,7 +64,7 @@ STATION_SCHEMA = vol.Schema({
 CONFIG_SCHEMA = vol.Schema({
     DOMAIN: vol.Schema({
         vol.Required(CONF_API_KEY): cv.string,
-        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): cv.time_period,
+        #vol.Optional(CONF_SCAN_INTERVAL, default=SCAN_INTERVAL): cv.time_period,
         vol.Required(CONF_STATIONS): vol.All(cv.ensure_list, [STATION_SCHEMA]),
         vol.Optional(CONF_MONITORED_CONDITIONS, default=list(SENSOR_TYPES)):
             vol.All(cv.ensure_list, [vol.In(SENSOR_TYPES)]),
@@ -75,7 +75,7 @@ CONFIG_SCHEMA = vol.Schema({
 def setup(hass, config):
     tankerkoenig_config = config[DOMAIN]
 
-    config[DOMAIN]['api'] = TankerkoenigAPI(tankerkoenig_config)
+    hass.data[DOMAIN] = TankerkoenigAPI(tankerkoenig_config)
 
 
     load_platform(hass, 'sensor', DOMAIN, tankerkoenig_config, config)
@@ -84,24 +84,24 @@ def setup(hass, config):
         load_platform(hass, 'binary_sensor', DOMAIN, tankerkoenig_config, config)
 
     def update_records_interval(now):
-        config[DOMAIN]['api'].update()
+        hass.data[DOMAIN].update()
 
     hass.bus.listen_once(EVENT_HOMEASSISTANT_START, update_records_interval)
     hass.services.register(DOMAIN, 'update', update_records_interval)
-    track_time_interval(hass, update_records_interval, config[DOMAIN][CONF_SCAN_INTERVAL])
+    track_time_interval(hass, update_records_interval, SCAN_INTERVAL)
 
     return True
 
 
 class TankerkoenigDevice(Entity):
-    def __init__(self, station, config):
+    def __init__(self, hass, station, config):
         if ('name' not in station):
             station['name'] = 'tankerkoenig_' + station['id']
 
         self._name = station['name']
         self._station = station
         self._id = station['id']
-        self._api = config['api']
+        self._api = hass.data[DOMAIN]
         self._api.add_station(self._id)
 
     @property
@@ -113,7 +113,6 @@ class TankerkoenigDevice(Entity):
         attr = {CONF_NAME: self._name, CONF_ID: self._id}
         return attr
 
-    @property
     def api(self):
         return self._api
 
@@ -132,7 +131,9 @@ class TankerkoenigAPI:
 
     def get_inputs(self, id, fuel_type):
         if (id in self._data):
-            return self._data[id][fuel_type.lower()]
+            fuel_type = fuel_type.lower()
+            if(fuel_type in self._data[id]):
+                return self._data[id][fuel_type.lower()]
 
         return None
 

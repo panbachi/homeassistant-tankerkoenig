@@ -24,14 +24,12 @@ SCAN_INTERVAL = timedelta(seconds=5)
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
-    # Add sensors for wallet balance
-
     tankerkoenig_config = discovery_info
 
     sensors = []
 
     for station in tankerkoenig_config[CONF_STATIONS]:
-        sensors.append(TankerkoenigBinarySensor(station, tankerkoenig_config))
+        sensors.append(TankerkoenigBinarySensor(hass, station, tankerkoenig_config))
 
     add_entities(sensors)
 
@@ -39,9 +37,9 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 class TankerkoenigBinarySensor(TankerkoenigDevice, BinarySensorDevice):
     """Implement an Tankerkoenig binary_sensor for displaying stations status."""
 
-    def __init__(self, station_config, config):
+    def __init__(self, hass, station_config, config):
         """Initialize the sensor."""
-        super().__init__(station_config, config)
+        super().__init__(hass, station_config, config)
         self._state = None
 
     @property
@@ -73,5 +71,5 @@ class TankerkoenigBinarySensor(TankerkoenigDevice, BinarySensorDevice):
 
     def update(self):
         """Fetch new status from API."""
-        self._state = self.api.get_status(self._id)
+        self._state = self._api.get_status(self._id)
 

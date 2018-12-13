@@ -24,13 +24,13 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
     for station in tankerkoenig_config[CONF_STATIONS]:
         if('e5' in tankerkoenig_config[CONF_MONITORED_CONDITIONS]):
-            sensors.append(TankerkoenigSensor('E5', station, tankerkoenig_config))
+            sensors.append(TankerkoenigSensor(hass, 'E5', station, tankerkoenig_config))
 
         if ('e10' in tankerkoenig_config[CONF_MONITORED_CONDITIONS]):
-            sensors.append(TankerkoenigSensor('E10', station, tankerkoenig_config))
+            sensors.append(TankerkoenigSensor(hass, 'E10', station, tankerkoenig_config))
 
         if ('diesel' in tankerkoenig_config[CONF_MONITORED_CONDITIONS]):
-            sensors.append(TankerkoenigSensor('Diesel', station, tankerkoenig_config))
+            sensors.append(TankerkoenigSensor(hass, 'Diesel', station, tankerkoenig_config))
 
     add_entities(sensors)
 
@@ -38,9 +38,9 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 class TankerkoenigSensor(TankerkoenigDevice):
     """Implement an Tankerkoenig sensor for displaying fuel prices."""
 
-    def __init__(self, fuel_type, station_config, config):
+    def __init__(self, hass, fuel_type, station_config, config):
         """Initialize the sensor."""
-        super().__init__(station_config, config)
+        super().__init__(hass, station_config, config)
         self._state = None
         self._fuel_type = fuel_type
         self._icon = 'mdi:gas-station'
@@ -67,4 +67,4 @@ class TankerkoenigSensor(TankerkoenigDevice):
 
     def update(self):
         """Fetch new price from API."""
-        self._state = self.api.get_inputs(self._id, self._fuel_type)
+        self._state = self._api.get_inputs(self._id, self._fuel_type)
