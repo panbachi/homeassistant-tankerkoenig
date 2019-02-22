@@ -7,7 +7,7 @@ https://github.com/panbachi/homeassistant-tankerkoenig
 import logging
 from datetime import timedelta
 
-from custom_components.tankerkoenig import TankerkoenigDevice, CONF_STATIONS
+from . import TankerkoenigDevice, CONF_STATIONS
 from homeassistant.const import CONF_MONITORED_CONDITIONS
 
 _LOGGER = logging.getLogger(__name__)

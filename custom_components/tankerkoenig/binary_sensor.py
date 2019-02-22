@@ -7,7 +7,7 @@ https://github.com/panbachi/homeassistant-tankerkoenig
 import logging
 from datetime import timedelta
 
-from custom_components.tankerkoenig import TankerkoenigDevice, CONF_STATIONS
+from . import TankerkoenigDevice, CONF_STATIONS
 from homeassistant.components.binary_sensor import BinarySensorDevice
 from homeassistant.const import CONF_NAME
 from homeassistant.util import slugify
