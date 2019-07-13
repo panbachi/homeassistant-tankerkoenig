@@ -144,8 +144,12 @@ class TankerkoenigAPI:
         return None
 
     def update(self):
-        response = requests.get(
-            'https://creativecommons.tankerkoenig.de/json/prices.php?apikey=' + self._config.get(
-                CONF_API_KEY) + '&ids=' + ','.join(self._stations))
-
-        self._data = response.json()['prices']
+        api_req = 'https://creativecommons.tankerkoenig.de/json/prices.php'
+        api_req += '?apikey=' + self._config.get(CONF_API_KEY)
+        api_req += '&ids=' + ','.join(self._stations)
+        response = requests.get(api_req)
+        _LOGGER.debug('Tankerkoenig API request: ' + api_req)
+        if (response.json()['ok'] == True):
+            self._data = response.json()['prices']
+        else:
+            _LOGGER.error('Tankerkoenig: ' + response.json()['status'] + ': ' + response.json()['message'])
