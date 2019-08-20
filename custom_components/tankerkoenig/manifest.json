@@ -1,0 +1,8 @@
+{
+  "domain": "tankerkoenig",
+  "name": "Tankerkönig",
+  "documentation": "https://github.com/panbachi/homeassistant-tankerkoenig",
+  "dependencies": [],
+  "codeowners": ["@napsio", "@panbachi"],
+  "requirements": []
+}
