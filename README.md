@@ -1,4 +1,6 @@
-﻿# Tankerkoenig Component
+# DEPRECATED Use https://www.home-assistant.io/integrations/tankerkoenig/ instead
+
+# Tankerkoenig Component
 
 [![Version](https://img.shields.io/badge/version-0.2.1-green.svg?style=for-the-badge)](#) [![mantained](https://img.shields.io/maintenance/yes/2019.svg?style=for-the-badge)](#)
 
