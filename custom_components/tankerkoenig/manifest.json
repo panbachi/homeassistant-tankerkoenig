@@ -4,5 +4,6 @@
   "documentation": "https://github.com/panbachi/homeassistant-tankerkoenig",
   "dependencies": [],
   "codeowners": ["@napsio", "@panbachi"],
+  "version": "0.2.1",
   "requirements": []
 }
